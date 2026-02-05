@@ -3,15 +3,47 @@ import { Menu, X, Zap, Sun, Moon, Globe } from 'lucide-react';
 import { useScroll } from '../../hooks/useScroll';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const isScrolled = useScroll();
     const { theme, toggleTheme } = useTheme();
     const { language, setLanguage, t } = useLanguage();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleLanguage = () => {
         setLanguage(language === 'es' ? 'en' : 'es');
+    };
+
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+
+        if (href.startsWith('#')) {
+            const elementId = href.substring(1);
+            if (location.pathname === '/') {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const navbarHeight = 80; // Approximate navbar height
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - navbarHeight;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            } else {
+                navigate('/');
+                // Wait for navigation then scroll (basic implementation)
+                setTimeout(() => {
+                    const element = document.getElementById(elementId);
+                    if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+        setIsOpen(false);
     };
 
     const navLinks = [
@@ -27,7 +59,7 @@ const Navbar: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                        <a href="#home" className="flex items-center gap-2 group">
+                        <a href="#home" onClick={(e) => handleNavClick(e, '#home')} className="flex items-center gap-2 group">
                             <img
                                 src="/nomtec-logo.png"
                                 alt="Nomtec"
@@ -42,7 +74,8 @@ const Navbar: React.FC = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="text-slate-800 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-400 font-display font-bold uppercase tracking-wider text-sm transition-colors"
+                                onClick={(e) => handleNavClick(e, link.href)}
+                                className="text-slate-800 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-400 font-display font-bold uppercase tracking-wider text-sm transition-colors cursor-pointer"
                             >
                                 {link.name}
                             </a>
@@ -69,7 +102,8 @@ const Navbar: React.FC = () => {
 
                         <a
                             href="#contact"
-                            className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-full font-display font-bold uppercase tracking-wide transition-all text-sm ml-4"
+                            onClick={(e) => handleNavClick(e, '#contact')}
+                            className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-full font-display font-bold uppercase tracking-wide transition-all text-sm ml-4 cursor-pointer"
                         >
                             {t('nav.startProject')}
                         </a>
@@ -102,7 +136,7 @@ const Navbar: React.FC = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                onClick={() => setIsOpen(false)}
+                                onClick={(e) => handleNavClick(e, link.href)}
                                 className="block px-3 py-3 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md text-base font-medium"
                             >
                                 {link.name}
