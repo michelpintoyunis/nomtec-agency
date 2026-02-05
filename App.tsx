@@ -25,7 +25,7 @@ function App() {
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
-                  <Route path="/admin" element={<AdminEvents />} />
+                  <Route path="/cojones" element={<AdminEvents />} />
                 </Route>
               </Routes>
             </BrowserRouter>
