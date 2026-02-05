@@ -1,0 +1,9 @@
+export { default as Navbar } from './layout/Navbar';
+export { default as Footer } from './layout/Footer';
+export { default as Hero } from './sections/Hero';
+export { default as Services } from './sections/Services';
+export { default as Pricing } from './sections/Pricing';
+export { default as IdeaGenerator } from './sections/IdeaGenerator';
+export { default as Portfolio } from './sections/Portfolio';
+export { default as Contact } from './sections/Contact';
+export { default as SectionHeader } from './common/SectionHeader';
