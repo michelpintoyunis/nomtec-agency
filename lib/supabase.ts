@@ -28,7 +28,13 @@ try {
             onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
             signInWithPassword: async () => ({ error: { message: "Supabase not configured properly" } }),
             signOut: async () => ({ error: null })
-        }
+        },
+        channel: () => ({
+            on: () => ({
+                subscribe: () => ({})
+            })
+        }),
+        removeChannel: () => { }
     } as any;
 }
 
